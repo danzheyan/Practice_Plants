@@ -8,7 +8,7 @@ def clean(data: pd.DataFrame, columns_to_keep=[]) -> pd.DataFrame:
     data.drop_duplicates(inplace=True)
 
     # Removing Outliers using IQR
-    numeric_data = data.select_dtypes(include="number")
+    numeric_data = data[columns_to_keep]
 
     Q1 = numeric_data.quantile(0.25)
     Q3 = numeric_data.quantile(0.75)
@@ -22,5 +22,9 @@ def clean(data: pd.DataFrame, columns_to_keep=[]) -> pd.DataFrame:
     return new_data
 
 
-def scale(data):
-    ...
+def scale(data: pd.DataFrame) -> pd.DataFrame:
+    scaler = MinMaxScaler()
+    scaled_data = scaler.fit_transform(data)
+    scaled_df = pd.DataFrame(scaled_data, columns=data.columns)
+
+    return scaled_df
